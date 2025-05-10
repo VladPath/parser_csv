@@ -5,8 +5,10 @@ from sys import argv
 res = dict()
 # You can add more allowed report hire
 allowed_report = ['payout']
+REPORT = None
 arr = argv
 data = []
+
 
 for arg_idx in range(1, len(arr)):
     if arr[arg_idx] == '--report':
@@ -74,9 +76,13 @@ def create_json_file(csv: str,  report: str):
                 rate = stroke[position_rate]
 
                 # you can add more reports if you need
-                if REPORT == 'payout':
-                    res.setdefault(pos,[]).append({'name': name,'hours': hours,'rate': rate,
-                                report: calculation_payout(int(hours), int(rate)),
+                if REPORT is None:
+                     res.setdefault(pos,[]).append({'name': name,'hours': hours,
+                                                    'rate': rate,
+                                })
+                elif REPORT == 'payout':
+                    res.setdefault(pos,[]).append({'name': name,'hours': hours,
+                                                   'rate': rate,report: calculation_payout(int(hours), int(rate)),
                                 })
 
 
@@ -85,22 +91,10 @@ for csv in data:
     create_json_file(csv, REPORT)
 
 # creating json file
+print('create json file ...')
 with open('json_file.json','w') as file:
         json.dump(res, file, indent=4)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print('json file created successfully')
 
 
 
